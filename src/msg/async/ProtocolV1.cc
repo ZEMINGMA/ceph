@@ -1132,6 +1132,15 @@ ssize_t ProtocolV1::write_message(Message *m, ceph::buffer::list &bl, bool more)
                      << "): sig = " << footer.sig << dendl;
     }
   }
+  
+/* ==========  ⬇⬇⬇  插桩从这里开始  ⬇⬇⬇  ========== */
+    ldout(cct, 0) << "===TX=== seq "     << out_seq
+    << " front "           << header.front_len
+    << " middle "          << header.middle_len
+    << " data "            << header.data_len
+    << " footer_flags 0x"  << std::hex << footer.flags << std::dec
+    << dendl;
+/* ==========  ⬆⬆⬆  插桩到这里结束  ⬆⬆⬆  ========== */
 
   connection->outgoing_bl.append(CEPH_MSGR_TAG_MSG);
   connection->outgoing_bl.append((char *)&header, sizeof(header));
